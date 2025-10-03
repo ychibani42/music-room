@@ -1,0 +1,69 @@
+# Docker Compose Configuration for Music Room
+# 
+# This file orchestrates the multi-container Docker application.
+# It defines and runs both the backend (FastAPI) and frontend (React Native) services.
+#
+# Services:
+# - backend: FastAPI server running on port 8000
+# - frontend: React Native (Expo) development server on port 19006
+#
+# Usage:
+#   docker-compose up    - Start all services
+#   docker-compose down  - Stop all services
+#   docker-compose build - Build all images
+
+version: '3.8'
+
+services:
+  # Backend Service - FastAPI
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: music-room-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount source code for hot-reload during development
+      - ./backend:/app
+      # Prevent node_modules from being overwritten
+      - /app/__pycache__
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - music-room-network
+    restart: unless-stopped
+
+  # Frontend Service - React Native (Expo)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: music-room-frontend
+    ports:
+      - "19000:19000"  # Expo development server
+      - "19006:19006"  # Expo web interface
+    volumes:
+      # Mount source code for hot-reload during development
+      - ./frontend:/app
+      # Prevent node_modules from being overwritten
+      - /app/node_modules
+    environment:
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - REACT_NATIVE_PACKAGER_HOSTNAME=localhost
+    networks:
+      - music-room-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+# Network configuration
+# Creates an isolated network for service communication
+networks:
+  music-room-network:
+    driver: bridge
+
+# Volumes (optional - for persistent data)
+volumes:
+  backend-data:
+  frontend-data:
