@@ -1,18 +1,24 @@
 """
-Main FastAPI application entry point.
+Main FastAPI application entry point for Music Room.
 
 This file initializes the FastAPI application, configures CORS middleware,
-and includes all API routes. It serves as the central hub for the backend API.
+and includes all API routes. It serves as the central hub for the Music Room backend API.
+
+Music Room is a collaborative music sharing and discovery platform where users can:
+- Create and join music rooms
+- Share their favorite tracks
+- Discover new music together
+- Collaborate on playlists
 """
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import health
+from app.routes import health, rooms
 
 # Initialize FastAPI application
 app = FastAPI(
-    title="React Native + FastAPI Starter",
-    description="A starter backend for React Native mobile applications",
+    title="Music Room API",
+    description="Backend API for Music Room - A collaborative music sharing platform",
     version="1.0.0"
 )
 
@@ -28,14 +34,17 @@ app.add_middleware(
 
 # Include API routes
 app.include_router(health.router, prefix="/api", tags=["health"])
+app.include_router(rooms.router, prefix="/api/rooms", tags=["rooms"])
 
 
 @app.get("/")
 def root():
     """
-    Root endpoint - simple health check
+    Root endpoint - API welcome message
     """
     return {
-        "message": "Welcome to the React Native + FastAPI Starter API",
-        "status": "active"
+        "message": "Welcome to Music Room API",
+        "description": "A collaborative music sharing and discovery platform",
+        "status": "active",
+        "version": "1.0.0"
     }
