@@ -26,8 +26,9 @@ import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import axios from 'axios';
 
 // API Configuration
-// Update this URL based on your environment
-const API_BASE_URL = 'http://localhost:8000';
+// When running in Docker, use the backend service name
+// For local development outside Docker, use 'http://localhost:8000'
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://backend:8000';
 
 export default function App() {
   const [backendStatus, setBackendStatus] = useState(null);

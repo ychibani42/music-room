@@ -8,24 +8,28 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
+# Set environment variables for Expo
+ENV EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+
 # Install Expo CLI globally
-RUN npm install -g expo-cli
+RUN npm install -g expo-cli@6.3.10
 
 # Copy package files
 COPY package*.json ./
 
 # Install dependencies
-# Using --legacy-peer-deps to handle potential dependency conflicts
 RUN npm install --legacy-peer-deps
 
 # Copy application code
 COPY . .
 
-# Expose Expo development server port
+# Expose ports
+# Metro bundler
+EXPOSE 8081
+# Expo development server
 EXPOSE 19000
-# Expo web port
+# Expo web interface
 EXPOSE 19006
 
-# Start Expo development server
-# The --tunnel flag allows access from physical devices
-CMD ["npm", "start"]
+# Start Expo web server
+CMD ["npx", "expo", "start", "--web", "--host", "0.0.0.0"]

@@ -34,17 +34,17 @@ music-room/
 ### Using Make Commands
 
 ```bash
-# Build all containers
+# Build all containers (first time or after changes)
 make build
 
 # Start all services
 make up
 
+# View logs (useful for debugging)
+make logs
+
 # Stop all services
 make down
-
-# View logs
-make logs
 
 # Clean up everything
 make clean
@@ -56,12 +56,24 @@ make clean
 # Build containers
 docker-compose build
 
-# Start services
-docker-compose up
+# Start services (detached mode)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
 
 # Stop services
 docker-compose down
 ```
+
+### First Time Setup
+1. `make build` - Build the containers (takes 2-3 minutes)
+2. `make up` - Start the services
+3. Wait for frontend to compile (check logs: `make frontend-logs`)
+4. Access the app at http://localhost:19006
+
+### Troubleshooting
+If something doesn't work, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
 ## 📡 API Endpoints
 
@@ -80,14 +92,20 @@ Once running, the backend API is available at `http://localhost:8000`
 ## 📱 Frontend
 
 The React Native app runs on:
-- Web: `http://localhost:19006`
-- Development server: `http://localhost:19000`
+- **Web**: `http://localhost:19006` ⭐ (Main access point)
+- **Expo DevTools**: `http://localhost:19000`
+- **Metro Bundler**: `http://localhost:8081`
 
 ### Features
 - View available music rooms
 - Real-time backend connectivity status
 - Pull-to-refresh functionality
 - Modern dark-themed UI
+
+### Important Notes
+- The frontend connects to the backend via `http://localhost:8000`
+- First build may take 2-3 minutes to install dependencies
+- Check `docker-compose logs -f frontend` if issues occur
 
 ## 🛠️ Technology Stack
 
