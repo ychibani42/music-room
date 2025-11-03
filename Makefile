@@ -1,18 +1,6 @@
-# Makefile for Music Room Application
-#
-# This Makefile provides convenient commands for managing the Docker environment.
-# It simplifies common Docker operations into easy-to-remember commands.
-#
-# Available commands:
-#   make build  - Build all Docker containers
-#   make up     - Start all services
-#   make down   - Stop all services
-#   make logs   - View logs from all services
-#   make clean  - Remove all containers, volumes, and images
 
-.PHONY: build up down logs clean restart status help
+all: up
 
-# Default target - show help
 help:
 	@echo "Music Room - Available Commands:"
 	@echo "  make build   - Build all Docker containers"
@@ -29,7 +17,7 @@ build:
 	docker-compose build
 
 # Start all services
-up:
+up: build
 	@echo "Starting all services..."
 	docker-compose up -d
 	@echo "Services started!"
@@ -53,21 +41,37 @@ logs:
 status:
 	docker-compose ps
 
-# Clean up everything (containers, volumes, images)
+#
+##				Clean up everything (containers, volumes, images)
+#
+
 clean:
 	@echo "Cleaning up Docker resources..."
-	docker-compose down -v --rmi all
+	docker compose down -v --rmi all
+	docker 
 	@echo "Cleanup complete!"
 
-# Development helpers
+#
+##				Development helpers
+#
+
 backend-logs:
 	docker-compose logs -f backend
 
 frontend-logs:
 	docker-compose logs -f frontend
 
+database-logs:
+	docker compose logs -f database
+
 backend-shell:
 	docker-compose exec backend /bin/bash
 
 frontend-shell:
-	docker-compose exec frontend /bin/sh
+	docker-compose exec frontend /bin/bash
+
+database-shell:
+	docker compose exec database /bin/bash
+
+
+.PHONY: build up down logs clean restart status help

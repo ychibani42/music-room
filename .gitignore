@@ -5,9 +5,9 @@ __pycache__/
 *.so
 .Python
 env/
-venv/
+MusicRoom/
 ENV/
-.venv
+.MusicRoom
 
 # Node
 node_modules/
@@ -35,3 +35,4 @@ Thumbs.db
 
 # Docker
 *.log
+
